@@ -2,7 +2,7 @@
 This repository contains the implementation of statistical and machine learning models for fault detection in mechanical devices based on selected signals such as current, power or vibration.   It has been developed as part of a thesis project.
 
 ## 🎯 Project Goal
-The main aim of this work is to **develop and evaluate statistical models for detecting faults in mechanical devices** using selected sensor signals (e.g., current, power, vibration).  
+The main aim of this work is to **develop and evaluate statistical models for detecting faults in mechanical devices** using selected sensor signals (e.g., current, rpm).  
 The project provides a **functional application** that demonstrates the performance of the selected algorithms and allows their direct comparison.
 
 ## 📋 Scope of Work
