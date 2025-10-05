@@ -11,3 +11,34 @@ As part of the thesis, the following tasks are covered:
 - **Review and selection of statistical models** – evaluating various approaches to fault detection.
 - **Algorithm design and implementation** – building models such as decision trees, neural networks, and classical statistical models.
 - **Testing and evaluation** – producing metrics, reports, and visualizations for model performance.
+
+```
+project_root/
+│
+├── data/ # raw and processed data
+│ ├── raw/ # original CSV or sensor data
+│ ├── processed/ # saved preprocessed data
+│
+├── models_code/ # all model implementation files (.py)
+│ ├── neural_network.py # neural network model definition/training
+│ ├── decision_tree.py # decision tree model definition/training
+│ ├── statistical_model.py # statistical model definition/training
+│
+├── preprocessing/ # data loading & preparation
+│ ├── preprocessing.py # data cleaning and splitting
+│
+├── tests/ # Python test scripts for models & preprocessing
+│ ├── test_neural_network.py
+│ ├── test_decision_tree.py
+│ ├── test_statistical_model.py
+│ ├── test_preprocessing.py
+│
+├── evaluation/ # evaluation and comparison
+│ ├── evaluate.py # common metrics & comparison
+│
+├── models/ # saved trained models (pkl)
+├── results/ # evaluation results, plots, reports
+│
+├── requirements.txt # list of Python dependencies
+└── main.py # entry point to run training and evaluation
+```
