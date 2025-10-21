@@ -209,10 +209,15 @@ __marimo__/
 # PyCharm
 .idea/
 
+# CodeBuddy
+.codebuddy/
+
 
 # Data
 data/raw/*.csv
 data/processed/*.csv
+data/IntermediateData/*.csv
+data/AnalysisData/*.csv
 
 # Trained models
 models/*.pkl
