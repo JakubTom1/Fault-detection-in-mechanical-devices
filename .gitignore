@@ -214,10 +214,8 @@ __marimo__/
 
 
 # Data
-data/raw/*.csv
-data/processed/*.csv
-data/IntermediateData/*.csv
-data/AnalysisData/*.csv
+*.csv
+*.pkl
 
 # Trained models
 models/*.pkl
