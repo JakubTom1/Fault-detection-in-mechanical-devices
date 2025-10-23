@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-import pickle
 import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, accuracy_score
