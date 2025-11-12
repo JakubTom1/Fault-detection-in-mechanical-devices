@@ -217,7 +217,7 @@ __marimo__/
 *.csv
 *.pkl
 *.png
-
+*.jpg
 # Trained models
 models/*.pkl
 models/*.h5
