@@ -16,15 +16,19 @@ OUTPUT_DIR = os.path.join(SCRIPT_PATH, '../data', 'preprocessed', 'neural_networ
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # === DATA LOADING ===
-# Load and combine CSV files, each with a Fault_Condition label
-dataframes = [
-    pd.read_csv(os.path.join(INPUT_DIR, 'healthy.csv')).assign(Fault_Condition='healthy'),
-    pd.read_csv(os.path.join(INPUT_DIR, 'healthy_zip.csv')).assign(Fault_Condition='healthy_zip'),
-    pd.read_csv(os.path.join(INPUT_DIR, 'faulty.csv')).assign(Fault_Condition='faulty'),
-    pd.read_csv(os.path.join(INPUT_DIR, 'faulty_zip.csv')).assign(Fault_Condition='faulty_zip')
-]
+dataframes = []
+
+for idx, (file_name, fault_cond) in enumerate([('healthy.csv', 'healthy'),
+                                                 ('healthy_zip.csv', 'healthy_zip'),
+                                                 ('faulty.csv', 'faulty'),
+                                                 ('faulty_zip.csv', 'faulty_zip')]):
+    df = pd.read_csv(os.path.join(INPUT_DIR, file_name))
+    df['Experiment ID'] = df['Experiment ID'] + idx * 1000
+    df['Fault_Condition'] = fault_cond
+    dataframes.append(df)
 
 data = pd.concat(dataframes, ignore_index=True)
+
 
 # Ensure columns are in correct order
 data = data[['Time (s)', 'CURRENT (A)', 'ROTO (RPM)', 'Experiment ID', 'Fault_Condition']]
@@ -69,7 +73,6 @@ label_encoder = LabelEncoder()
 all_labels = data['Fault_Condition'].unique()
 label_encoder.fit(all_labels)
 
-
 def create_sequences(df, window_size, step, label_encoder):
     X = []
     y = []
@@ -80,7 +83,7 @@ def create_sequences(df, window_size, step, label_encoder):
 
         for i in range(0, len(features) - window_size + 1, step):
             X.append(features[i:i + window_size])
-            y.append(label_encoder.transform([label])[0]) 
+            y.append(label_encoder.transform([label])[0])
 
     return np.array(X), np.array(y)
 
