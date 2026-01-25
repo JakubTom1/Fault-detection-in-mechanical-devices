@@ -7,7 +7,7 @@ import joblib
 # === PATHS ===
 SCRIPT_PATH = os.getcwd()
 INPUT_DIR = os.path.abspath(os.path.join(SCRIPT_PATH, '..', 'data', 'AnalysisData'))
-OUTPUT_DIR = os.path.abspath(os.path.join(SCRIPT_PATH, '..', 'data', 'preprocessed','decision_tree'))
+OUTPUT_DIR = os.path.abspath(os.path.join(SCRIPT_PATH, '..', 'data', 'preprocessed', 'analysis_data'))
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # === DATA LOADING ===

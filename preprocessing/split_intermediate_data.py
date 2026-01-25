@@ -11,7 +11,7 @@ STEP = 50
 # === PATHS ===
 SCRIPT_PATH = os.getcwd()
 INPUT_DIR = os.path.abspath(os.path.join(SCRIPT_PATH, '..', 'data', 'IntermediateData'))
-OUTPUT_DIR = os.path.join(SCRIPT_PATH, '../data', 'preprocessed', 'neural_network')
+OUTPUT_DIR = os.path.join(SCRIPT_PATH, '../data', 'preprocessed', 'time_window_data')
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
