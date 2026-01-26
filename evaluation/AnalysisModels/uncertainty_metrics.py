@@ -105,9 +105,10 @@ class UncertaintyEvaluator:
         variance : ndarray [n_samples]
             Variance across trees (epistemic uncertainty proxy).
         """
+        X_numpy = np.array(X)
         # Collect per-tree probability predictions
         # Shape: [n_trees, n_samples, n_classes]
-        all_tree_preds = np.stack([tree.predict_proba(X) for tree in model.estimators_])
+        all_tree_preds = np.stack([tree.predict_proba(X_numpy) for tree in model.estimators_])
 
         # Standard Random Forest output: mean probability
         avg_proba = np.mean(all_tree_preds, axis=0)
