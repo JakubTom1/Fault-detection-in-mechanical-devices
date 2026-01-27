@@ -3,6 +3,8 @@ import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import log_loss, brier_score_loss
 from sklearn.calibration import calibration_curve
+from sklearn.base import clone, BaseEstimator, ClassifierMixin
+from sklearn.utils import resample
 
 class UncertaintyEvaluator:
     """
@@ -163,3 +165,54 @@ class UncertaintyEvaluator:
         epistemic_var = np.mean(np.var(probs_stack, axis=0), axis=1)
 
         return mean_proba, epistemic_var
+
+
+class BootstrapEnsemble(BaseEstimator, ClassifierMixin):
+    """
+    Wrapper converting any model (GNB, QDA, XGB) into a probabilistic ensemble
+    capable of estimating epistemic uncertainty via Bootstrap Aggregation (Bagging).
+    """
+
+    def __init__(self, base_model, n_estimators=20, random_state=42):
+        self.base_model = base_model
+        self.n_estimators = n_estimators
+        self.random_state = random_state
+        self.estimators_ = []
+
+    def fit(self, X, y):
+        """Trains n_estimators on random subsets of data (Bootstrap)."""
+        self.estimators_ = []
+        # Safety conversion to numpy
+        X = np.array(X) if hasattr(X, 'values') else X
+        y = np.array(y) if hasattr(y, 'values') else y
+
+        for i in range(self.n_estimators):
+            # Sampling with replacement (Bootstrap)
+            X_boot, y_boot = resample(X, y, random_state=self.random_state + i)
+
+            model = clone(self.base_model)
+            model.fit(X_boot, y_boot)
+            self.estimators_.append(model)
+        return self
+
+    def predict_proba_with_uncertainty(self, X):
+        """
+        Returns:
+        1. Mean probability (probas)
+        2. Prediction variance (epistemic uncertainty)
+        3. Standard deviation (for interval visualization)
+        """
+        X = np.array(X) if hasattr(X, 'values') else X
+        # Collect predictions from all models [n_models, n_samples, n_classes]
+        all_preds = np.stack([m.predict_proba(X) for m in self.estimators_])
+
+        # Mean across models (Bayesian Model Averaging approximation)
+        mean_proba = np.mean(all_preds, axis=0)
+
+        # Variance across models (Epistemic Uncertainty)
+        epistemic_var = np.mean(np.var(all_preds, axis=0), axis=1)
+
+        # Standard deviation for visualization (sqrt of variance)
+        epistemic_std = np.mean(np.std(all_preds, axis=0), axis=1)
+
+        return mean_proba, epistemic_var, epistemic_std
