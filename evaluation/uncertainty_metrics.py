@@ -1,8 +1,6 @@
 import numpy as np
-import pandas as pd
 from scipy.stats import entropy
 from sklearn.metrics import log_loss, brier_score_loss
-from sklearn.calibration import calibration_curve
 from sklearn.base import clone, BaseEstimator, ClassifierMixin
 from sklearn.utils import resample
 
@@ -48,7 +46,7 @@ class UncertaintyEvaluator:
 
         # Multiclass Brier score (squared error in probability space)
         y_ohe = np.eye(probs.shape[1])[self.y_true]
-        brier = np.mean(np.sum((probs - y_ohe) ** 2, axis=1))
+        brier = brier_score_loss(y_ohe, probs_clipped)
 
         # 3. Predictive entropy (total uncertainty)
         # H(p) = -sum(p * log(p))
@@ -130,7 +128,6 @@ class UncertaintyEvaluator:
         - Bayesian model averaged predictions
         - Epistemic uncertainty via posterior predictive variance
         """
-        import xarray as xr
 
         # Extract posterior samples of weights and biases
         # W: [chains, draws, features, classes]
