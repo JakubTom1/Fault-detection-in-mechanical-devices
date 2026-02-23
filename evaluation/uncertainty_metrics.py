@@ -185,7 +185,7 @@ class BootstrapEnsemble(BaseEstimator, ClassifierMixin):
 
         for i in range(self.n_estimators):
             # Sampling with replacement (Bootstrap)
-            X_boot, y_boot = resample(X, y, random_state=self.random_state + i)
+            X_boot, y_boot = resample(X, y, random_state=self.random_state + i, stratify=y)
 
             model = clone(self.base_model)
             model.fit(X_boot, y_boot)

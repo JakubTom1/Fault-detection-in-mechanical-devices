@@ -84,13 +84,14 @@ def create_sequences(df, window_size, step, label_encoder):
         for i in range(0, len(features) - window_size + 1, step):
             X.append(features[i:i + window_size])
             y.append(label_encoder.transform([label])[0])
-
+        time = exp_data[['Time (s)']].values
+        print(time[0],time[window_size])
     return np.array(X), np.array(y)
 
 X_train, y_train = create_sequences(train_data, WINDOW_SIZE, STEP, label_encoder)
 X_val, y_val = create_sequences(val_data, WINDOW_SIZE, STEP, label_encoder)
 X_test, y_test = create_sequences(test_data, WINDOW_SIZE, STEP, label_encoder)
-
+'''
 # === SAVE TO FILES ===
 # Save scaled datasets
 train_data.to_csv(os.path.join(OUTPUT_DIR, 'train.csv'), index=False)
@@ -107,7 +108,7 @@ joblib.dump(scaler, scaler_path)
 
 label_encoder_path = os.path.join(OUTPUT_DIR, 'label_encoder.pkl')
 joblib.dump(label_encoder, label_encoder_path)
-
+'''
 # --- VERIFY ---
 print(f"Train experiments: {len(train_ids)}, Validation: {len(val_ids)}, Test: {len(test_ids)}")
 print(f"Train sequences: {len(X_train)}, Val sequences: {len(X_val)}, Test sequences: {len(X_test)}\n")
@@ -118,10 +119,12 @@ print("Fault condition distribution by experiments:")
 print("Train:\n", experiment_labels[train_ids].value_counts(normalize=True))
 print("Val:\n", experiment_labels[val_ids].value_counts(normalize=True))
 print("Test:\n", experiment_labels[test_ids].value_counts(normalize=True))
-
+'''
 print("\nScaler saved to:", scaler_path)
+'''
 print("Mean used for scaling:\n", dict(zip(['CURRENT (A)', 'ROTO (RPM)'], scaler.mean_)))
 print("Standard deviations used for scaling:\n", dict(zip(['CURRENT (A)', 'ROTO (RPM)'], scaler.scale_)))
-
+'''
 print("\nLabel encoder saved to:", label_encoder_path)
+'''
 print("Label classes:\n", dict(enumerate(label_encoder.classes_)))

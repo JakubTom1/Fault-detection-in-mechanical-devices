@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import joblib
+import numpy as np
 
 # === PATHS ===
 SCRIPT_PATH = os.getcwd()
@@ -28,17 +29,42 @@ feature_cols = [col for col in data.columns if any(x in col for x in ["CURRENT",
 X = data[feature_cols]
 y = data["Fault_Condition"]
 
-# === STANDARDIZATION ===
-scaler = StandardScaler()
-X_scaled = pd.DataFrame(scaler.fit_transform(X), columns=feature_cols, index=X.index)
 
 # === TRAIN/VAL/TEST SPLIT ===
-X_train, X_test, y_train, y_test = train_test_split(
-    X_scaled, y, test_size=0.3, random_state=42, stratify=y
+X_train_raw, X_test_raw, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42, stratify=y
 )
 #X_val, X_test, y_val, y_test = train_test_split(
 #    X_temp, y_temp, test_size=0.5, random_state=42, stratify=y_temp
 #)
+
+# === MULTICOLLINEARITY REDUCTION ===
+corr_matrix = X_train_raw.corr().abs()
+upper_tri = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(bool))
+
+# Find features with correlation greater than 0.90
+threshold = 0.90
+to_drop = [col for col in upper_tri.columns if any(upper_tri[col] > threshold)]
+
+print(f"Removing {len(to_drop)} highly correlated features: {to_drop}")
+X_train_raw = X_train_raw.drop(columns=to_drop)
+X_test_raw = X_test_raw.drop(columns=to_drop)
+# Update feature_cols list so the scaler and saving steps use the correct columns
+feature_cols = X_train_raw.columns.tolist()
+
+# === STANDARDIZATION ===
+scaler = StandardScaler()
+X_train = pd.DataFrame(
+    scaler.fit_transform(X_train_raw),
+    columns=feature_cols,
+    index=X_train_raw.index
+)
+
+X_test = pd.DataFrame(
+    scaler.transform(X_test_raw),
+    columns=feature_cols,
+    index=X_test_raw.index
+)
 
 # === SAVE TO FILES ===
 # Reset indices for proper concatenation
