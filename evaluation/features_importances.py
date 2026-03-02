@@ -65,11 +65,11 @@ df_results = pd.DataFrame(results)
 
 
 def scale_to_sum_one(series):
-    s_clipped = series.clip(lower=0)
-    total_sum = s_clipped.sum()
+    series.abs().sum()
+    total_sum = series.abs().sum()
     if total_sum == 0:
-        return s_clipped
-    return s_clipped / total_sum
+        return series
+    return series / total_sum
 
 
 df_results['RF_Scaled'] = scale_to_sum_one(df_results['Random_Forest_Score'])
