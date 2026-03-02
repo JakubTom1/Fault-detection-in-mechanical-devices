@@ -79,13 +79,13 @@ train_df = pd.concat([X_train_reset, y_train_reset], axis=1)
 #val_df = pd.concat([X_val_reset, y_val_reset], axis=1)
 test_df = pd.concat([X_test_reset, y_test_reset], axis=1)
 
-train_df.to_csv(os.path.join(OUTPUT_DIR, "train.csv"), index=False)
+#train_df.to_csv(os.path.join(OUTPUT_DIR, "train.csv"), index=False)
 #val_df.to_csv(os.path.join(OUTPUT_DIR, "val.csv"), index=False)
-test_df.to_csv(os.path.join(OUTPUT_DIR, "test.csv"), index=False)
+#test_df.to_csv(os.path.join(OUTPUT_DIR, "test.csv"), index=False)
 
 # Save scaler and feature names for later use
-joblib.dump(scaler, os.path.join(OUTPUT_DIR, "scaler.pkl"))
-joblib.dump(feature_cols, os.path.join(OUTPUT_DIR, "feature_names.pkl"))
+#joblib.dump(scaler, os.path.join(OUTPUT_DIR, "scaler.pkl"))
+#joblib.dump(feature_cols, os.path.join(OUTPUT_DIR, "feature_names.pkl"))
 
 print("✅ Data saved to preprocessed directory")
 print(f"Train: {len(train_df)} |  Test: {len(test_df)}") #Val: {len(val_df)} |
